@@ -41,7 +41,4 @@ public class BookyMain extends Application {
         primaryStage.show();
     }
 
-    public static File showDirectoryChooser() {
-        return new DirectoryChooser().showDialog(new Stage());
-    }
 }

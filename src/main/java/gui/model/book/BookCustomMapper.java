@@ -8,11 +8,14 @@ import java.util.Locale;
 
 public class BookCustomMapper {
 
-    private Book book;
+    private final Book book;
 
-    public BookCustomMapper builder() {
+    private BookCustomMapper() {
         book = new Book();
-        return this;
+    }
+
+    public static BookCustomMapper builder() {
+        return new BookCustomMapper();
     }
 
     public Book build() {

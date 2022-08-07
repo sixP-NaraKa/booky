@@ -1,5 +1,10 @@
 package gui.view.generateqr;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import gui.model.book.Book;
 import gui.model.book.BookCustomMapper;
 import javafx.fxml.FXML;
@@ -10,6 +15,9 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.Date;
 
 public class GenerateQRCodeViewController {
 
@@ -18,6 +26,8 @@ public class GenerateQRCodeViewController {
 
     @FXML
     private TextField qrOutDir;
+
+    private File qrOutDirAsFile;
 
     @FXML
     private Button generateQrCodeButton;
@@ -57,20 +67,20 @@ public class GenerateQRCodeViewController {
     @FXML
     private void onQrOutDir() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
-        File selectedDirectory = directoryChooser.showDialog(new Stage());
-        if (selectedDirectory == null) {
+        qrOutDirAsFile = directoryChooser.showDialog(new Stage());
+        if (qrOutDirAsFile == null) {
             generateQrCodeButton.setDisable(true);
             new Alert(Alert.AlertType.ERROR, "Select a directory!").showAndWait();
             return;
         }
-        qrOutDir.setText(selectedDirectory.getAbsolutePath());
+        qrOutDir.setText(qrOutDirAsFile.getAbsolutePath());
         generateQrCodeButton.setDisable(false);
     }
 
     @FXML
-    private void onGenerateQrCode() {
+    private void onGenerateQrCode() throws WriterException, IOException {
         System.out.println("Generate QR code...");
-        Book book = new BookCustomMapper().builder()
+        Book book = BookCustomMapper.builder()
                 .setBookName(bookName)
                 .setSeriesName(seriesName)
                 .setReleaseDate(releaseDate)
@@ -82,6 +92,14 @@ public class GenerateQRCodeViewController {
                 .build();
 
         System.out.println("New Book: " + book);
+
+        // generating QR code
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        BitMatrix bitMatrix = qrCodeWriter.encode(book.toString(), BarcodeFormat.QR_CODE, 200, 200);
+        String filePath = "%s/%s_%s.png".formatted(qrOutDirAsFile.getAbsolutePath(), book.getBookName(), LocalDate.now());
+        MatrixToImageWriter.writeToPath(bitMatrix, "PNG", new File(filePath).toPath());
+
+        System.out.println("QR Code generated: " + filePath);
     }
 
 }
