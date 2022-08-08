@@ -4,10 +4,8 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
-import java.io.File;
 import java.io.IOException;
 
 public class BookyMain extends Application {
@@ -25,6 +23,7 @@ public class BookyMain extends Application {
     public void start(Stage stage) throws IOException {
         primaryStage = stage;
         primaryStage.setTitle("Booky");
+        primaryStage.setResizable(false);
         prepareViews();
         scene = new Scene(mainLayout);
         showMainView();

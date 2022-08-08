@@ -1,6 +1,8 @@
 package gui.model.book;
 
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -32,14 +34,23 @@ public class BookCustomMapper {
         return this;
     }
 
-    public BookCustomMapper setReleaseDate(TextField node) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy", Locale.GERMAN);
-        book.setReleaseDate(LocalDate.parse(node.getText(), formatter));
+    public BookCustomMapper setSeriesEntry(TextFormatter<Integer> formatter) {
+        book.setSeriesEntry(formatter.getValue());
         return this;
     }
 
-    public BookCustomMapper setEdition(TextField node) {
-        book.setEdition(node.getText());
+    public BookCustomMapper setReleaseDate(DatePicker node) {
+        book.setReleaseDate(node.getValue());
+        return this;
+    }
+
+    public BookCustomMapper setEdition(TextFormatter<Integer> formatter) {
+        book.setEdition(formatter.getValue());
+        return this;
+    }
+
+    public BookCustomMapper setLanguage(TextField node) {
+        book.setLanguage(node.getText());
         return this;
     }
 
@@ -53,13 +64,13 @@ public class BookCustomMapper {
         return this;
     }
 
-    public BookCustomMapper setChapterAmount(TextField node) {
-        book.setChapterAmount(Integer.parseInt(node.getText().isBlank() ? "0" : node.getText()));
+    public BookCustomMapper setChapterAmount(TextFormatter<Integer> formatter) {
+        book.setChapterAmount(formatter.getValue());
         return this;
     }
 
-    public BookCustomMapper setPageAmount(TextField node) {
-        book.setPageAmount(Integer.parseInt(node.getText().isBlank() ? "0" : node.getText()));
+    public BookCustomMapper setPageAmount(TextFormatter<Integer> formatter) {
+        book.setPageAmount(formatter.getValue());
         return this;
     }
 }

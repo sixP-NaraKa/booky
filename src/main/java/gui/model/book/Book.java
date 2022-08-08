@@ -1,7 +1,6 @@
 package gui.model.book;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class Book {
 
@@ -9,9 +8,13 @@ public class Book {
 
     private String seriesName;
 
+    private int seriesEntry;
+
     private LocalDate releaseDate;
 
-    private String edition;
+    private int edition;
+
+    private String language;
 
     private String author;
 
@@ -37,6 +40,14 @@ public class Book {
         this.seriesName = seriesName;
     }
 
+    public int getSeriesEntry() {
+        return this.seriesEntry;
+    }
+
+    public void setSeriesEntry(int seriesEntry) {
+        this.seriesEntry = seriesEntry;
+    }
+
     public LocalDate getReleaseDate() {
         return releaseDate;
     }
@@ -45,12 +56,20 @@ public class Book {
         this.releaseDate = releaseDate;
     }
 
-    public String getEdition() {
+    public int getEdition() {
         return edition;
     }
 
-    public void setEdition(String edition) {
+    public void setEdition(int edition) {
         this.edition = edition;
+    }
+
+    public String getLanguage() {
+        return this.language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 
     public String getAuthor() {

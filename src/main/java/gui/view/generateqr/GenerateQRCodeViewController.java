@@ -8,16 +8,18 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import gui.model.book.Book;
 import gui.model.book.BookCustomMapper;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import javafx.util.converter.IntegerStringConverter;
 
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.function.UnaryOperator;
 
 public class GenerateQRCodeViewController {
 
@@ -41,10 +43,20 @@ public class GenerateQRCodeViewController {
     private TextField seriesName;
 
     @FXML
-    private TextField releaseDate;
+    private TextField seriesEntry;
+
+    private TextFormatter<Integer> seriesEntryFormatter;
+
+    @FXML
+    private DatePicker releaseDate;
 
     @FXML
     private TextField edition;
+
+    private TextFormatter<Integer> editionFormatter;
+
+    @FXML
+    private TextField language;
 
     @FXML
     private TextField author;
@@ -55,13 +67,47 @@ public class GenerateQRCodeViewController {
     @FXML
     private TextField chapterAmount;
 
+    private TextFormatter<Integer> chapterAmountFormatter;
+
     @FXML
     private TextField pageAmount;
+
+    private TextFormatter<Integer> pageAmountFormatter;
+
+    @FXML
+    private ImageView qrCodeImage;
+
+    @FXML
+    private Text qrCodeText;
 
     @FXML
     public void initialize() {
         System.out.println("Initializing " + getClass().getName());
+
         if (qrOutDir.getText() == null || qrOutDir.getText().isBlank()) generateQrCodeButton.setDisable(true);
+
+        UnaryOperator<TextFormatter.Change> numberValidation = change -> {
+            String newText = change.getText();
+            if (!newText.matches("([1-9]+)?")) { // allow empty string, e.g. to delete input
+                // check if only a 0 has been inputted
+                if (newText.matches("0") && change.getControlNewText().length() > 1) return change;
+                return null;
+            }
+            return change;
+        };
+        seriesEntryFormatter = new TextFormatter<>(new IntegerStringConverter(), 1, numberValidation);
+        seriesEntry.setTextFormatter(seriesEntryFormatter);
+
+        editionFormatter = new TextFormatter<>(new IntegerStringConverter(), 1, numberValidation);
+        edition.setTextFormatter(editionFormatter);
+
+        chapterAmountFormatter = new TextFormatter<>(new IntegerStringConverter(), 1, numberValidation);
+        chapterAmount.setTextFormatter(chapterAmountFormatter);
+
+        pageAmountFormatter = new TextFormatter<>(new IntegerStringConverter(), 1, numberValidation);
+        pageAmount.setTextFormatter(pageAmountFormatter);
+
+//        seriesEntryFormatter.valueProperty().addListener(((observableValue, integer, t1) -> System.out.printf("%s - %s - %s -- %s\n", observableValue, integer, t1, t1.getClass())));
     }
 
     @FXML
@@ -79,27 +125,42 @@ public class GenerateQRCodeViewController {
 
     @FXML
     private void onGenerateQrCode() throws WriterException, IOException {
-        System.out.println("Generate QR code...");
+        qrCodeImage.setImage(null);
+
+        System.out.println("Generating QR code...");
         Book book = BookCustomMapper.builder()
                 .setBookName(bookName)
                 .setSeriesName(seriesName)
+                .setSeriesEntry(seriesEntryFormatter)
                 .setReleaseDate(releaseDate)
-                .setEdition(edition)
+                .setEdition(editionFormatter)
+                .setLanguage(language)
                 .setAuthor(author)
                 .setArtist(artist)
-                .setChapterAmount(chapterAmount)
-                .setPageAmount(pageAmount)
+                .setChapterAmount(chapterAmountFormatter)
+                .setPageAmount(pageAmountFormatter)
                 .build();
 
         System.out.println("New Book: " + book);
 
         // generating QR code
+        final String qrCodeFilePath = generateQrCode(book);
+
+        qrCodeImage.setImage(new Image(qrCodeFilePath));
+    }
+
+    private String generateQrCode(Book book) throws WriterException, IOException {
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         BitMatrix bitMatrix = qrCodeWriter.encode(book.toString(), BarcodeFormat.QR_CODE, 200, 200);
-        String filePath = "%s/%s_%s.png".formatted(qrOutDirAsFile.getAbsolutePath(), book.getBookName(), LocalDate.now());
+        String filePath = "%s/%s-Vol.%s_%s.png".formatted(
+                qrOutDirAsFile.getAbsolutePath(),
+                book.getBookName(),
+                book.getSeriesEntry(),
+                LocalDate.now());
         MatrixToImageWriter.writeToPath(bitMatrix, "PNG", new File(filePath).toPath());
 
         System.out.println("QR Code generated: " + filePath);
+        return filePath;
     }
 
 }
