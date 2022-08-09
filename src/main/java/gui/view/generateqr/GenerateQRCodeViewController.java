@@ -17,11 +17,15 @@ import javafx.stage.Stage;
 import javafx.util.converter.IntegerStringConverter;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Properties;
 import java.util.function.UnaryOperator;
 
 public class GenerateQRCodeViewController {
+
+    Properties applicationProperties;
 
     @FXML
     private Button qrOutDirButton;
@@ -81,8 +85,14 @@ public class GenerateQRCodeViewController {
     private Text qrCodeText;
 
     @FXML
-    public void initialize() {
+    public void initialize() throws IOException {
         System.out.println("Initializing " + getClass().getName());
+
+        // load application.properties file and set initial directory if present
+        applicationProperties = new Properties();
+        applicationProperties.load(this.getClass().getClassLoader().getResourceAsStream("application.properties"));
+        qrOutDirAsFile = new File(applicationProperties.getProperty("booky.qrcode.out"));
+        qrOutDir.setText(qrOutDirAsFile.exists() && qrOutDirAsFile.isDirectory() ? qrOutDirAsFile.getAbsolutePath() : "");
 
         if (qrOutDir.getText() == null || qrOutDir.getText().isBlank()) generateQrCodeButton.setDisable(true);
 
@@ -106,19 +116,21 @@ public class GenerateQRCodeViewController {
 
         pageAmountFormatter = new TextFormatter<>(new IntegerStringConverter(), 1, numberValidation);
         pageAmount.setTextFormatter(pageAmountFormatter);
-
-//        seriesEntryFormatter.valueProperty().addListener(((observableValue, integer, t1) -> System.out.printf("%s - %s - %s -- %s\n", observableValue, integer, t1, t1.getClass())));
     }
 
     @FXML
-    private void onQrOutDir() {
+    private void onQrOutDir() throws IOException {
         DirectoryChooser directoryChooser = new DirectoryChooser();
-        qrOutDirAsFile = directoryChooser.showDialog(new Stage());
-        if (qrOutDirAsFile == null) {
+        directoryChooser.setInitialDirectory(qrOutDirAsFile);
+        final File selectedOutDir = directoryChooser.showDialog(new Stage());
+        if (selectedOutDir == null && qrOutDirAsFile == null) {
             generateQrCodeButton.setDisable(true);
             new Alert(Alert.AlertType.ERROR, "Select a directory!").showAndWait();
             return;
         }
+        qrOutDirAsFile = selectedOutDir != null ? selectedOutDir : qrOutDirAsFile;
+        applicationProperties.setProperty("booky.qrcode.out", qrOutDirAsFile.getAbsolutePath());
+        applicationProperties.store(new FileWriter("src/main/resources/application.properties"), null);
         qrOutDir.setText(qrOutDirAsFile.getAbsolutePath());
         generateQrCodeButton.setDisable(false);
     }
@@ -126,6 +138,7 @@ public class GenerateQRCodeViewController {
     @FXML
     private void onGenerateQrCode() throws WriterException, IOException {
         qrCodeImage.setImage(null);
+        qrCodeText.setText("");
 
         System.out.println("Generating QR code...");
         Book book = BookCustomMapper.builder()
@@ -147,6 +160,7 @@ public class GenerateQRCodeViewController {
         final String qrCodeFilePath = generateQrCode(book);
 
         qrCodeImage.setImage(new Image(qrCodeFilePath));
+        qrCodeText.setText(book.getBookName());
     }
 
     private String generateQrCode(Book book) throws WriterException, IOException {

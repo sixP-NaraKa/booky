@@ -29,6 +29,11 @@
                     <include>**/*.fxml</include>
                 </includes>
             </resource>
+            <!-- copy resources to specified folder (e.g. to make it available to the application) -->
+            <resource>
+                <directory>src/main/resources</directory>
+                <targetPath>${project.build.directory}/classes</targetPath>
+            </resource>
         </resources>
 
         <plugins>
