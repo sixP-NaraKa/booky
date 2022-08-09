@@ -23,7 +23,7 @@ import java.time.LocalDate;
 import java.util.Properties;
 import java.util.function.UnaryOperator;
 
-public class GenerateQRCodeViewController {
+final class GenerateQRCodeViewController {
 
     Properties applicationProperties;
 

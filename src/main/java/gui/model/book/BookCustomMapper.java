@@ -4,7 +4,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 
-public class BookCustomMapper {
+public final class BookCustomMapper {
 
     private final Book book;
 

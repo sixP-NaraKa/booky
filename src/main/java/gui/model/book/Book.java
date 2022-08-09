@@ -2,7 +2,7 @@ package gui.model.book;
 
 import java.time.LocalDate;
 
-public class Book {
+public final class Book {
 
     private String bookName;
 
