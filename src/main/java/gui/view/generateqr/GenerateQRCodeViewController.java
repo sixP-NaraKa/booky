@@ -104,17 +104,13 @@ public final class GenerateQRCodeViewController {
             // if: add "1" to the start immediately if 0
             // else: add "1", no empty input allowed after the next round of change detection (see ".getControlText()")
             //       this is useful since the user can then delete all text without change detection firing instantly
+            int newTextLength = change.getControlNewText().length();
             if (change.getControlNewText().startsWith("0")) {
-                int newTextLength = change.getControlNewText().length();
                 int addedPos = newTextLength > 1 ? 1 : 0; // prevent IndexOutOfBoundsException during replacing of all input
-                // change.setRange(0, 1); // only first number should be changed
-                // getChange(change, "1", change.getCaretPosition() + newTextLength,
-                //                        change.getAnchor() + newTextLength);
                 getChange(change, "1", addedPos + newTextLength,
                         addedPos + newTextLength);
-            } else if (change.getControlText().isBlank()) {
+            } else if (change.getControlText().isBlank() && newTextLength == 0) {
                 getChange(change, "1", 1, 1);
-                // change.setRange(0, change.getRangeEnd()); // replace all
             }
             return change;
         };
