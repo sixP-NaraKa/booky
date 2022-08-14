@@ -18,13 +18,7 @@
     <build>
         <resources>
             <resource>
-                <directory>src/main/java/gui/view/generateqr</directory>
-                <includes>
-                    <include>**/*.fxml</include>
-                </includes>
-            </resource>
-            <resource>
-                <directory>src/main/java/gui/view/scanqr</directory>
+                <directory>src/main/java/gui/view</directory>
                 <includes>
                     <include>**/*.fxml</include>
                 </includes>

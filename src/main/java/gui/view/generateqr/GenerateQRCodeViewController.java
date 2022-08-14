@@ -25,7 +25,7 @@ import java.util.function.UnaryOperator;
 
 public final class GenerateQRCodeViewController {
 
-    Properties applicationProperties;
+    private Properties applicationProperties;
 
     @FXML
     private Button qrOutDirButton;
