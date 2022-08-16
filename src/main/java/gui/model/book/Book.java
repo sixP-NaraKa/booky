@@ -106,10 +106,10 @@ public final class Book {
 
     public String getFormattedText() {
         return "Book: " + bookName + " \n" +
-                "Series: " + seriesName + "\tEntry: " + seriesEntry + " \n" +
-                "Release: " + releaseDate + "\tEdition: " + edition + "\tLanguage: " + language + " \n" +
-                "Author: " + author + "\tArtist: " + artist + " \n" +
-                "Chapters: " + chapterAmount + "\tPages: " + pageAmount;
+                "Series: " + seriesName + " \nEntry: " + seriesEntry + " \n" +
+                "Release: " + releaseDate + " \nEdition: " + edition + " \nLanguage: " + language + " \n" +
+                "Author: " + author + " \nArtist: " + artist + " \n" +
+                "Chapters: " + chapterAmount + " \nPages: " + pageAmount;
     }
 
     @Override

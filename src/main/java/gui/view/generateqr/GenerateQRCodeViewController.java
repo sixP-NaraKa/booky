@@ -7,13 +7,12 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import gui.model.book.Book;
 import gui.model.book.BookCustomMapper;
+import gui.util.Chooser;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
-import javafx.stage.DirectoryChooser;
-import javafx.stage.Stage;
 import javafx.util.converter.IntegerStringConverter;
 
 import java.io.File;
@@ -135,19 +134,17 @@ public final class GenerateQRCodeViewController {
 
     @FXML
     private void onQrOutDir() throws IOException {
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setInitialDirectory(qrOutDirAsFile);
-        final File selectedOutDir = directoryChooser.showDialog(new Stage());
+        final File selectedOutDir = Chooser.ofDirectory(qrOutDirAsFile);
         if (selectedOutDir == null && qrOutDirAsFile == null) {
             generateQrCodeButton.setDisable(true);
             new Alert(Alert.AlertType.ERROR, "Select a directory!").showAndWait();
-            return;
+        } else {
+            qrOutDirAsFile = selectedOutDir != null ? selectedOutDir : qrOutDirAsFile;
+            applicationProperties.setProperty("booky.qrcode.out", qrOutDirAsFile.getAbsolutePath());
+            applicationProperties.store(new FileWriter("src/main/resources/application.properties"), null);
+            qrOutDir.setText(qrOutDirAsFile.getAbsolutePath());
+            generateQrCodeButton.setDisable(false);
         }
-        qrOutDirAsFile = selectedOutDir != null ? selectedOutDir : qrOutDirAsFile;
-        applicationProperties.setProperty("booky.qrcode.out", qrOutDirAsFile.getAbsolutePath());
-        applicationProperties.store(new FileWriter("src/main/resources/application.properties"), null);
-        qrOutDir.setText(qrOutDirAsFile.getAbsolutePath());
-        generateQrCodeButton.setDisable(false);
     }
 
     @FXML
