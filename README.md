@@ -41,3 +41,5 @@ Clone the repo, go into the root directory and run the following *__maven__* goa
 ### Read QR:
 
 ![read qr](/docs/images/booky_readqr.JPG)
+
+Alternatively, any other QR-code reader can be used to read the stored data.
