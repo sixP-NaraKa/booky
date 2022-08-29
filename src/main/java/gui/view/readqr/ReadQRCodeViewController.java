@@ -37,7 +37,6 @@ public final class ReadQRCodeViewController {
             new Alert(Alert.AlertType.ERROR, "Select a QR Code!").showAndWait();
         } else {
             qrCodeReadField.setText(selectedQrCode.getAbsolutePath());
-//            qrCodeDataOutputField.setText("Reading '%s'...".formatted(selectedQrCode.getAbsolutePath()));
             try {
                 String result = readQrCode(selectedQrCode);
                 qrCodeDataOutputField.setText(result);

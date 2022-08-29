@@ -18,7 +18,7 @@ public final class Chooser {
         final FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(initialDirectory);
         final FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("QR Codes",
-                "*.png", "jpg", "jpeg");
+                "*.png", "*.jpg", "*.jpeg");
         fileChooser.getExtensionFilters().add(extensionFilter);
         return fileChooser.showOpenDialog(new Stage());
     }
