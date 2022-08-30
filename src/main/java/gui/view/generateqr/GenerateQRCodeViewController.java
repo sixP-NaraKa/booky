@@ -14,6 +14,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.util.converter.IntegerStringConverter;
+import javafx.util.converter.LongStringConverter;
+import service.openlibrary.OpenLibraryService;
+import service.openlibrary.model.Author;
+import service.openlibrary.model.OpenLibraryBook;
+import service.openlibrary.model.OpenLibraryBookData;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -33,6 +38,14 @@ public final class GenerateQRCodeViewController {
     private TextField qrOutDir;
 
     private File qrOutDirAsFile;
+
+    @FXML
+    private TextField isbn;
+
+    @FXML
+    private Button autofillButton;
+
+    private TextFormatter<Long> isbnFormatter;
 
     @FXML
     private Button generateQrCodeButton;
@@ -124,6 +137,15 @@ public final class GenerateQRCodeViewController {
 
         pageAmountFormatter = new TextFormatter<>(new IntegerStringConverter(), 1, numberValidation);
         pageAmount.setTextFormatter(pageAmountFormatter);
+
+        UnaryOperator<TextFormatter.Change> isbnValidation = change -> {
+            if (!change.getText().matches("([0-9]+)?")) { // allow empty string, e.g. to delete input
+                return null;
+            }
+            return change;
+        };
+        isbnFormatter = new TextFormatter<>(new LongStringConverter(), null, isbnValidation);
+        isbn.setTextFormatter(isbnFormatter);
     }
 
     private void getChange(TextFormatter.Change change, String text, int caretPosition, int anchorPosition) {
@@ -145,6 +167,19 @@ public final class GenerateQRCodeViewController {
             qrOutDir.setText(qrOutDirAsFile.getAbsolutePath());
             generateQrCodeButton.setDisable(false);
         }
+    }
+
+    @FXML
+    private void onAutofill() {
+        OpenLibraryBook openLibraryBook = OpenLibraryService.getBookByIsbn(isbnFormatter.getValue());
+        OpenLibraryBookData openLibraryBookData = openLibraryBook.getOpenLibraryBookData();
+        if (openLibraryBookData != null) {
+            openLibraryBookData.setIsbn(isbnFormatter.getValue());
+            populateFieldValues(openLibraryBookData);
+        } else {
+            new Alert(Alert.AlertType.INFORMATION, "No ISBN book data available!").showAndWait();
+        }
+
     }
 
     @FXML
@@ -187,6 +222,15 @@ public final class GenerateQRCodeViewController {
 
         System.out.println("QR Code generated: " + filePath);
         return filePath;
+    }
+
+    private void populateFieldValues(OpenLibraryBookData openLibraryBookData) {
+        bookName.setText(openLibraryBookData.getTitle());
+        author.setText(String.join(", ", openLibraryBookData.getAuthors()
+                .stream().map(Author::getName).toList()));
+        pageAmountFormatter.setValue(openLibraryBookData.getNumberOfPages() != 0 ?
+                openLibraryBookData.getNumberOfPages() : 1);
+        releaseDate.setValue(LocalDate.of(openLibraryBookData.getPublishDate(), 1, 1));
     }
 
 }
