@@ -24,7 +24,11 @@ TBD:
 - ISBN
 - ...and more
 
-### Run (local)
+### ToDo
+- fill in book data automatically by ISBN
+
+
+## Run (local)
 - Tested primarily with JDK 18.
 
 Clone the repo, go into the root directory and run the following *__maven__* goal:
