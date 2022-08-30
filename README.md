@@ -26,6 +26,15 @@ TBD:
 
 ### ToDo
 - fill in book data automatically by ISBN
+  - add additional UI fields (as mentioned above) to populate
+
+  - book data currently autofilled (data from openlibrary.org):
+    - book name
+    - author(s)
+    - publish date
+    - pages
+
+  
 
 
 ## Run (local)
