@@ -17,24 +17,21 @@ Currently stored data:
 - artist
 - chapters
 - pages
+- publisher
+- publisher place
+
+Currently available data to autofill via ISBN (from openlibrary.org):
+  - book name
+  - author(s)
+  - publisher
+  - publish place
+  - publish date
+  - pages
 
 TBD:
 
-- publisher
 - ISBN
-- ...and more
 
-### ToDo
-- fill in book data automatically by ISBN
-  - add additional UI fields (as mentioned above) to populate
-
-  - book data currently autofilled (data from openlibrary.org):
-    - book name
-    - author(s)
-    - publish date
-    - pages
-
-  
 
 
 ## Run (local)

@@ -69,4 +69,14 @@ public final class BookCustomMapper {
         book.setPageAmount(formatter.getValue());
         return this;
     }
+
+    public BookCustomMapper setPublisher(TextField node) {
+        book.setPublisher(node.getText());
+        return this;
+    }
+
+    public BookCustomMapper setPublishPlace(TextField node) {
+        book.setPublishPlace(node.getText());
+        return this;
+    }
 }

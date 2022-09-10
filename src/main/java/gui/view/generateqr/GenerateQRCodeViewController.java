@@ -16,9 +16,7 @@ import javafx.scene.text.Text;
 import javafx.util.converter.IntegerStringConverter;
 import javafx.util.converter.LongStringConverter;
 import service.openlibrary.OpenLibraryService;
-import service.openlibrary.model.Author;
-import service.openlibrary.model.OpenLibraryBook;
-import service.openlibrary.model.OpenLibraryBookData;
+import service.openlibrary.model.*;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -95,6 +93,12 @@ public final class GenerateQRCodeViewController {
 
     @FXML
     private Text qrCodeText;
+
+    @FXML
+    private TextField publisher;
+
+    @FXML
+    private TextField publisherPlace;
 
     @FXML
     public void initialize() throws IOException {
@@ -199,6 +203,8 @@ public final class GenerateQRCodeViewController {
                 .setArtist(artist)
                 .setChapterAmount(chapterAmountFormatter)
                 .setPageAmount(pageAmountFormatter)
+                .setPublisher(publisher)
+                .setPublishPlace(publisherPlace)
                 .build();
 
         System.out.println("New Book: " + book);
@@ -231,6 +237,10 @@ public final class GenerateQRCodeViewController {
         pageAmountFormatter.setValue(openLibraryBookData.getNumberOfPages() != 0 ?
                 openLibraryBookData.getNumberOfPages() : 1);
         releaseDate.setValue(LocalDate.of(openLibraryBookData.getPublishDate(), 1, 1));
+        publisher.setText(String.join(", ", openLibraryBookData.getPublishers()
+                .stream().map(Publisher::getName).toList()));
+        publisherPlace.setText(String.join(", ", openLibraryBookData.getPublishPlaces()
+                .stream().map(PublishPlace::getName).toList()));
     }
 
 }

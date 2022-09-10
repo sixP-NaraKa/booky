@@ -24,6 +24,10 @@ public final class Book {
 
     private int pageAmount;
 
+    private String publisher;
+
+    private String publishPlace;
+
     public String getBookName() {
         return bookName;
     }
@@ -104,12 +108,29 @@ public final class Book {
         this.pageAmount = pageAmount;
     }
 
+    public String getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
+    }
+
+    public String getPublishPlace() {
+        return publishPlace;
+    }
+
+    public void setPublishPlace(String publishPlace) {
+        this.publishPlace = publishPlace;
+    }
+
     public String getFormattedText() {
         return "Book: " + bookName + " \n" +
                 "Series: " + seriesName + " \nEntry: " + seriesEntry + " \n" +
                 "Release: " + releaseDate + " \nEdition: " + edition + " \nLanguage: " + language + " \n" +
                 "Author: " + author + " \nArtist: " + artist + " \n" +
-                "Chapters: " + chapterAmount + " \nPages: " + pageAmount;
+                "Chapters: " + chapterAmount + " \nPages: " + pageAmount + "\n" +
+                "Publisher: " + publisher + "\n" + "Publish Place: " + publishPlace;
     }
 
     @Override
@@ -117,12 +138,16 @@ public final class Book {
         return "Book{" +
                 "bookName='" + bookName + '\'' +
                 ", seriesName='" + seriesName + '\'' +
+                ", seriesEntry=" + seriesEntry +
                 ", releaseDate=" + releaseDate +
-                ", edition='" + edition + '\'' +
+                ", edition=" + edition +
+                ", language='" + language + '\'' +
                 ", author='" + author + '\'' +
                 ", artist='" + artist + '\'' +
                 ", chapterAmount=" + chapterAmount +
                 ", pageAmount=" + pageAmount +
+                ", publisher='" + publisher + '\'' +
+                ", publishPlace='" + publishPlace + '\'' +
                 '}';
     }
 }

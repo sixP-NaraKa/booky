@@ -27,6 +27,9 @@ public class OpenLibraryBookData implements Serializable {
 
     private List<Publisher> publishers;
 
+    @JsonProperty(value = "publish_places")
+    private List<PublishPlace> publishPlaces;
+
     @JsonProperty(value = "publish_date")
     private int publishDate;
 
@@ -68,6 +71,14 @@ public class OpenLibraryBookData implements Serializable {
 
     public void setPublishers(List<Publisher> publishers) {
         this.publishers = publishers;
+    }
+
+    public List<PublishPlace> getPublishPlaces() {
+        return publishPlaces;
+    }
+
+    public void setPublishPlaces(List<PublishPlace> publishPlaces) {
+        this.publishPlaces = publishPlaces;
     }
 
     public int getPublishDate() {
