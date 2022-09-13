@@ -17,6 +17,7 @@ Currently stored data:
 - artist
 - chapters
 - pages
+- ISBN
 - publisher
 - publisher place
 
@@ -27,10 +28,7 @@ Currently available data to autofill via ISBN (from openlibrary.org):
   - publish place
   - publish date
   - pages
-
-TBD:
-
-- ISBN
+  - ISBN
 
 
 
