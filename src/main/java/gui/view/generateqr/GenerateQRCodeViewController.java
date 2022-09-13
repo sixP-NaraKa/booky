@@ -48,6 +48,9 @@ public final class GenerateQRCodeViewController {
     @FXML
     private Button generateQrCodeButton;
 
+    @FXML
+    private Button clearButton;
+
     /* TextFields which hold the book information */
 
     @FXML
@@ -158,6 +161,8 @@ public final class GenerateQRCodeViewController {
 
         isbnFormatter = new TextFormatter<>(new LongStringConverter(), null, isbnValidation);
         isbn.setTextFormatter(isbnFormatter);
+
+        clearButton.onMouseClickedProperty().set(mouseEvent -> clear());
     }
 
     private void getChange(TextFormatter.Change change, String text, int caretPosition, int anchorPosition) {
@@ -191,6 +196,25 @@ public final class GenerateQRCodeViewController {
         } else {
             new Alert(Alert.AlertType.INFORMATION, "No ISBN book data available!").showAndWait();
         }
+    }
+
+    @FXML
+    private void clear() {
+        isbnAutofillFormatter.setValue(null);
+
+        bookName.setText("");
+        seriesName.setText("");
+        seriesEntryFormatter.setValue(1);
+        releaseDate.setValue(null);
+        editionFormatter.setValue(1);
+        language.setText("");
+        author.setText("");
+        artist.setText("");
+        chapterAmountFormatter.setValue(1);
+        pageAmountFormatter.setValue(1);
+        isbnFormatter.setValue(null);
+        publisher.setText("");
+        publisherPlace.setText("");
     }
 
     @FXML
