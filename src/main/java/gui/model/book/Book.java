@@ -24,6 +24,8 @@ public final class Book {
 
     private int pageAmount;
 
+    private Long isbn;
+
     private String publisher;
 
     private String publishPlace;
@@ -108,6 +110,14 @@ public final class Book {
         this.pageAmount = pageAmount;
     }
 
+    public Long getIsbn() {
+        return isbn;
+    }
+
+    public void setIsbn(Long isbn) {
+        this.isbn = isbn;
+    }
+
     public String getPublisher() {
         return publisher;
     }
@@ -129,7 +139,7 @@ public final class Book {
                 "Series: " + seriesName + " \nEntry: " + seriesEntry + " \n" +
                 "Release: " + releaseDate + " \nEdition: " + edition + " \nLanguage: " + language + " \n" +
                 "Author: " + author + " \nArtist: " + artist + " \n" +
-                "Chapters: " + chapterAmount + " \nPages: " + pageAmount + "\n" +
+                "Chapters: " + chapterAmount + " \nPages: " + pageAmount + "\nISBN: " + isbn + "\n" +
                 "Publisher: " + publisher + "\n" + "Publish Place: " + publishPlace;
     }
 
@@ -146,6 +156,7 @@ public final class Book {
                 ", artist='" + artist + '\'' +
                 ", chapterAmount=" + chapterAmount +
                 ", pageAmount=" + pageAmount +
+                ", isbn=" + isbn +
                 ", publisher='" + publisher + '\'' +
                 ", publishPlace='" + publishPlace + '\'' +
                 '}';

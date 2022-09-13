@@ -38,12 +38,12 @@ public final class GenerateQRCodeViewController {
     private File qrOutDirAsFile;
 
     @FXML
-    private TextField isbn;
+    private TextField isbnAutofill;
 
     @FXML
     private Button autofillButton;
 
-    private TextFormatter<Long> isbnFormatter;
+    private TextFormatter<Long> isbnAutofillFormatter;
 
     @FXML
     private Button generateQrCodeButton;
@@ -87,6 +87,11 @@ public final class GenerateQRCodeViewController {
     private TextField pageAmount;
 
     private TextFormatter<Integer> pageAmountFormatter;
+
+    @FXML
+    private TextField isbn;
+
+    private TextFormatter<Long> isbnFormatter;
 
     @FXML
     private ImageView qrCodeImage;
@@ -148,6 +153,9 @@ public final class GenerateQRCodeViewController {
             }
             return change;
         };
+        isbnAutofillFormatter = new TextFormatter<>(new LongStringConverter(), null, isbnValidation);
+        isbnAutofill.setTextFormatter(isbnAutofillFormatter);
+
         isbnFormatter = new TextFormatter<>(new LongStringConverter(), null, isbnValidation);
         isbn.setTextFormatter(isbnFormatter);
     }
@@ -175,15 +183,14 @@ public final class GenerateQRCodeViewController {
 
     @FXML
     private void onAutofill() {
-        OpenLibraryBook openLibraryBook = OpenLibraryService.getBookByIsbn(isbnFormatter.getValue());
+        OpenLibraryBook openLibraryBook = OpenLibraryService.getBookByIsbn(isbnAutofillFormatter.getValue());
         OpenLibraryBookData openLibraryBookData = openLibraryBook.getOpenLibraryBookData();
         if (openLibraryBookData != null) {
-            openLibraryBookData.setIsbn(isbnFormatter.getValue());
+            openLibraryBookData.setIsbn(isbnAutofillFormatter.getValue());
             populateFieldValues(openLibraryBookData);
         } else {
             new Alert(Alert.AlertType.INFORMATION, "No ISBN book data available!").showAndWait();
         }
-
     }
 
     @FXML
@@ -203,6 +210,7 @@ public final class GenerateQRCodeViewController {
                 .setArtist(artist)
                 .setChapterAmount(chapterAmountFormatter)
                 .setPageAmount(pageAmountFormatter)
+                .setIsbn(isbnFormatter)
                 .setPublisher(publisher)
                 .setPublishPlace(publisherPlace)
                 .build();
@@ -236,6 +244,7 @@ public final class GenerateQRCodeViewController {
                 .stream().map(Author::getName).toList()));
         pageAmountFormatter.setValue(openLibraryBookData.getNumberOfPages() != 0 ?
                 openLibraryBookData.getNumberOfPages() : 1);
+        isbnFormatter.setValue(openLibraryBookData.getIsbn());
         releaseDate.setValue(LocalDate.of(openLibraryBookData.getPublishDate(), 1, 1));
         publisher.setText(String.join(", ", openLibraryBookData.getPublishers()
                 .stream().map(Publisher::getName).toList()));

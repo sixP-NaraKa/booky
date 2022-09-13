@@ -70,6 +70,11 @@ public final class BookCustomMapper {
         return this;
     }
 
+    public BookCustomMapper setIsbn(TextFormatter<Long> node) {
+        book.setIsbn(node.getValue());
+        return this;
+    }
+
     public BookCustomMapper setPublisher(TextField node) {
         book.setPublisher(node.getText());
         return this;
